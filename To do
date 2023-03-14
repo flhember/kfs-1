@@ -1,0 +1,16 @@
+    1. Boot code asm
+
+    2. Kernel main ft c
+
+    3. Linker
+
+    4. Grub
+
+    5. Makefile 
+
+
+
+Source:
+    - https://www.linuxjournal.com/content/what-does-it-take-make-kernel-0
+    - https://meepy.medium.com/creating-a-kernel-from-scratch-1a1aa569780f
+    - http://kernelx.weebly.com/commands-and-uses-of-the-micro-controller.html
