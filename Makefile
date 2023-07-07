@@ -1,4 +1,3 @@
-
 BIN = kernel
 CFG = grub.cfg
 ISO_PATH = iso
@@ -21,6 +20,7 @@ iso: kernel
 	@mkdir -pv $(GRUB_PATH)
 	@cp $(BIN) $(BOOT_PATH)
 	@cp $(CFG) $(GRUB_PATH)
+	@grub-file --is-x86-multiboot $(BOOT_PATH)/$(BIN)
 	@grub-mkrescue -o my-kernel.iso $(ISO_PATH)
 
 clean:
