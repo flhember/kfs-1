@@ -1,3 +1,10 @@
+Install cross compiler: 
+    git clone https://github.com/lordmilko/i686-elf-tools
+    cd i686-elf-tools
+    ./i686-elf-tools.sh linux
+    unzip /usr/local
+
+
     1. Boot code asm
 
     2. Kernel main
@@ -15,5 +22,6 @@ Source:
     - https://meepy.medium.com/creating-a-kernel-from-scratch-1a1aa569780f
     - http://kernelx.weebly.com/commands-and-uses-of-the-micro-controller.html
 
-    
-    https://wiki.osdev.org/Meaty_Skeleton
+    1. https://wiki.osdev.org/Bare_Bones
+
+    2. https://wiki.osdev.org/Meaty_Skeleton
