@@ -41,11 +41,12 @@ all: build linker iso boot
 	@echo Make has completed
 
 build:
+	@make -C libc/
 	@make -C kernel/
 	@$(ASCC) $(BOOT_FILE) -o $(OBJ_PATH)/boot.o
 
 linker: build 
-	@$(CC) -T $(LINK_FILE) -o $(BIN) $(CFLAGS) $(OBJ_FILES) -lgcc
+	@$(CC) -T $(LINK_FILE) -o $(BIN) $(CFLAGS) $(OBJ_FILES) -lgcc libc/libc
 
 iso: build linker
 	@mkdir -pv $(GRUB_PATH)
@@ -57,11 +58,16 @@ iso: build linker
 boot: build linker iso
 	@$(QEMU) $(ISO)
 
+		#ERROR
 clean:
 	@rm -rf $(OBJ_PATH)
+	#@make -C kernel/ clean
+	#@make -C libc/ clean
 
 fclean: clean
 	@rm -rf $(BIN) $(ISO_PATH) $(ISO)
+	#@make -C fclean kernel/
+	#@make -C fclean libc/
 
 re: fclean
 	@make all

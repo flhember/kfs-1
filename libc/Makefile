@@ -11,20 +11,44 @@ end=$ \033[0m
 
 CC = i686-elf-gcc
 CFLAGS += 
+ARCC = i686-elf-ar
+ARFLAGS +=
 
+NAME = libc
 #------------------------------------PATH/FILES-----------------------------------#
 
+INC_PATH = ./includes/
+STRNG_PATH = ./string/
+OBJ_PATH = ./obj/
+
+STRNG_FILES = strlen
+
+SRC_FILES = $(STRNG_FILES:%=%.c)
+OBJ_FILES = $(patsubst %.c, $(OBJ_PATH)%.o, $(SRC_FILES))
+
+OBJ = $(patsubst %.c, $(OBJ_PATH)%.o, $(SRC_FILES))
 
 #--------------------------------------RULES--------------------------------------#
 
-all: 
+all: $(NAME)
 
+$(OBJ_PATH):
+	@mkdir $(OBJ_PATH)
+
+$(OBJ_FILES): $(OBJ_PATH)%.o : $(STRNG_PATH)%.c
+	@$(CC) $(CFLAGS) -c -I $(INC_PATH) $< -o $@
+	@echo "Compilation of $(whi)$(notdir $<)$(grn_da) done.$(end)"
+
+$(NAME): $(OBJ_PATH) $(OBJ_FILES)
+	@$(ARCC) $(ARFLAGS) $(NAME) $(OBJ_FILES)
+	@echo "$(grn_li)$(notdir $(NAME))$(grn_da) done.$(end)"
 
 clean:
-
+	@rm -Rf $(OBJ_PATH)
 
 fclean: clean
-
+	@rm -Rf $(NAME)
+	@echo "$(red_li)$(notdir $(NAME))$(red_da) removed.$(end)"
 
 re: fclean
 	@make all

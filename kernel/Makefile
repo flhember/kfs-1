@@ -19,7 +19,7 @@ INC_PATH = ./includes/
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/
 
-KRL_FILES = kernel tty
+KRL_FILES = kernel tty keyboard
 INC_FILES = kernel.h
 
 SRC_FILES = $(KRL_FILES:%=%.c)
