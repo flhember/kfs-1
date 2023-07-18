@@ -1,13 +1,14 @@
 #include <../includes/tty.h>
 #include <../includes/keyboard.h>
+#include <../includes/gdt.h>
+
 
 void kernel_main(void) 
 {
+	init_gdt();
+
 	terminal_initialize();
+
  	print_42();
 
-	while (1) {
-		keyboard_handler();
-	}
-	// set loop for keyboard
 }

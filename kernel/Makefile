@@ -11,6 +11,10 @@ end=$ \033[0m
 
 CC = i686-elf-gcc
 CFLAGS += -ffreestanding -nostdlib -c
+
+ASCC = i686-elf-as
+ASFLAGS +=
+
 NAME = kernel
 
 #------------------------------------PATH/FILES-----------------------------------#
@@ -19,13 +23,15 @@ INC_PATH = ./includes/
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/
 
-KRL_FILES = kernel tty keyboard
-INC_FILES = kernel.h
+KRL_FILES = kernel tty keyboard gdt
+KRL_FILES_AS = flush
 
 SRC_FILES = $(KRL_FILES:%=%.c)
+SRC_AS_FILES = $(KRL_FILES_AS:%=%.s)
 OBJ_FILES = $(KRL_FILES:%=%.o)
 
 OBJ = $(patsubst %.c, $(OBJ_PATH)%.o, $(SRC_FILES))
+OBJ_AS = $(patsubst %.s, $(OBJ_PATH)%.o, $(SRC_AS_FILES))
 
 #--------------------------------------RULES--------------------------------------#
 
@@ -38,7 +44,11 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@$(CC) $(CFLAGS) -I $(INC_PATH) $< -o $@
 	@echo "Compilation of $(whi)$(notdir $<)$(grn_da) done.$(end)"
 
-$(NAME): $(OBJ_PATH) $(OBJ)
+$(OBJ_PATH)%.o: $(SRC_PATH)%.s
+	@$(ASCC) -I $(INC_PATH) $< -o $@
+	@echo "Compilation of $(whi)$(notdir $<)$(grn_da) done.$(end)"
+
+$(NAME): $(OBJ_PATH) $(OBJ) $(OBJ_AS)
 
 clean:
 	@rm -R $(OBJ_PATH)
