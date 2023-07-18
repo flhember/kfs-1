@@ -60,14 +60,12 @@ boot: build linker iso
 
 		#ERROR
 clean:
-	@rm -rf $(OBJ_PATH)
-	#@make -C kernel/ clean
-	#@make -C libc/ clean
+	@rm -rf kernel/obj
+	@rm -rf libc/obj
 
 fclean: clean
 	@rm -rf $(BIN) $(ISO_PATH) $(ISO)
-	#@make -C fclean kernel/
-	#@make -C fclean libc/
+	@rm -rf libc/libc
 
 re: fclean
 	@make all

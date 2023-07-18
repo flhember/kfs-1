@@ -10,7 +10,7 @@ end=$ \033[0m
 #-----------------------------------Cross-Compiler--------------------------------#
 
 CC = i686-elf-gcc
-CFLAGS += -ffreestanding -nostdlib -c
+CFLAGS += -ffreestanding -nostdlib -c -Wall -Wextra
 
 ASCC = i686-elf-as
 ASFLAGS +=

@@ -1,5 +1,10 @@
 #include <../includes/gdt.h>
 
+/* Set the ptr gdt to address of subject */
+struct gdt_entry *gdt = (struct gdt_entry *)GDT_ADDRESS;
+
+struct gdt_ptr gp;
+
 /* Setup a descriptor in the Global Descriptor Table */
 void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran)
 {
@@ -10,29 +15,26 @@ void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned cha
     gdt[num].granularity = ((limit >> 16) & 0x0F);
     gdt[num].granularity |= (gran & 0xF0);
     gdt[num].access = access;
-
 }
 
 void init_gdt(void)
 {
     /* Setup the GDT pointer and limit */
-    gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
+    gp.limit = (sizeof(struct gdt_entry) * NB_SEG) - 1 ;
     gp.base = (uint32_t)gdt;
 
-    /* Our NULL descriptor */
+    /* NULL descriptor */
     gdt_set_gate(0, 0, 0, 0, 0);
 
-    /* The second entry is our Code Segment. The base address
-    *  is 0, the limit is 4GBytes, it uses 4KByte granularity,
-    *  uses 32-bit opcodes, and is a Code Segment descriptor.
-    *  Please check the table above in the tutorial in order
-    *  to see exactly what each value means */
-    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
+    /* Kern seg */
+    gdt_set_gate(1, 0, 0xFFFF, (uint8_t)KERN_PERM_CODE, GRAN);
+    gdt_set_gate(2, 0, 0xFFFF, (uint8_t)KERN_PERM_DATA, GRAN);
+    gdt_set_gate(3, 0, 0xFFFF, (uint8_t)KERN_PERM_STACK, GRAN);
 
-    /* The third entry is our Data Segment. It's EXACTLY the
-    *  same as our code segment, but the descriptor type in
-    *  this entry's access byte says it's a Data Segment */
-    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
+    /* User sef */
+    gdt_set_gate(4, 0, 0xFFFF, (uint8_t)USER_PERM_CODE, GRAN);
+    gdt_set_gate(5, 0, 0xFFFF, (uint8_t)USER_PERM_DATA, GRAN);
+    gdt_set_gate(6, 0, 0xFFFF, (uint8_t)USER_PERM_STACK, GRAN);
 
     /* Flush out the old GDT and install the new changes with addresse of new */
     gdt_flush(&gp);
