@@ -75,7 +75,6 @@ void print_42(void)
 {
 	int			align = 26;
 
-	terminal_writestring("\n");
 	terminal_column = align;    /* next line */
 	terminal_writestring("        :::     :::::::: \n");
 	terminal_column = align;    /* next line */
@@ -91,7 +90,6 @@ void print_42(void)
 	terminal_column = align;    /* next line \n*/
 	terminal_writestring("   ###  ##########       \n");
 	terminal_column = 0;
-	terminal_row += 2;
 }
 
 /*

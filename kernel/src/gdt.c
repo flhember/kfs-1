@@ -42,11 +42,33 @@ void init_gdt(void)
 }
 
 void print_gdt() {
+    int i = 1;
+    char *tab[NB_SEG];
+
+    tab[0] = "NULL";
+    tab[1] = "KERN_CODE";
+    tab[2] = "KERN_DATA";
+    tab[3] = "KERN_STCK";
+    tab[4] = "USER_CODE";
+    tab[5] = "USER_DATA";
+    tab[6] = "USER_STCK";
+
     kprintf("---- GDT INFO ----\n");
     kprintf("GDT Base: 0x%8x\n", gp.base);
     kprintf("GDT Limite: %x\n", gp.limit);
+    kprintf("\n            BLOW BMID BHGH LMTLOW GRAN ACC\n");
+    while (i < NB_SEG) {
+        kprintf("%s   ", tab[i]);
+        kprintf("%x    ", gdt[i].base_low);
+        kprintf("%x    ", gdt[i].base_middle);
+        kprintf("%x    ", gdt[i].base_high);
+        kprintf("%x   ", gdt[i].limit_low);
+        kprintf("%x   ", gdt[i].granularity);
+        kprintf("%x\n", gdt[i].access);
+        i++;
+    }
 
-    kprintf("\n\n---- Dump Stack ----\n");
+    kprintf("\n---- Dump Stack ----\n");
     kdump(gp.base, gp.limit + 9);
 
 }
