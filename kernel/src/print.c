@@ -42,8 +42,9 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 */
 void terminal_putchar(char c) 
 {
-	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-	if (++terminal_column == VGA_WIDTH) {
+	if (c != '\n')
+		terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+	if (++terminal_column == VGA_WIDTH || c == '\n') {
 		terminal_column = 0;
 		if (++terminal_row == VGA_HEIGHT)
 			terminal_row = 0;
@@ -72,35 +73,51 @@ void terminal_writestring(const char* data)
 */
 void print_42(void)
 {
-	int			align = 27;
+	int			align = 26;
 
-	terminal_column = 80 + align;    /* next line */
-	terminal_writestring("        :::     :::::::: ");
-	terminal_column = 160 + align;    /* next line */
-	terminal_writestring("      :+:     :+:    :+: ");
-	terminal_column = 240 + align;    /* next line */
-	terminal_writestring("    +:+ +:+        +:+   ");
-	terminal_column = 320 + align;    /* next line */
-	terminal_writestring("  +#+  +:+      +#+      ");
-	terminal_column = 400 + align;    /* next line */
-	terminal_writestring("+#+#+#+#+#+  +#+         ");
-	terminal_column = 480 + align;    /* next line */
-	terminal_writestring("     #+#   #+#           ");
-	terminal_column = 560 + align;    /* next line */
-	terminal_writestring("   ###  ##########       ");
-	terminal_column = 720;
+	terminal_writestring("\n");
+	terminal_column = align;    /* next line */
+	terminal_writestring("        :::     :::::::: \n");
+	terminal_column = align;    /* next line */
+	terminal_writestring("      :+:     :+:    :+: \n");
+	terminal_column = align;    /* next line */
+	terminal_writestring("    +:+ +:+        +:+   \n");
+	terminal_column = align;    /* next line */
+	terminal_writestring("  +#+  +:+      +#+      \n");
+	terminal_column = align;    /* next line */
+	terminal_writestring("+#+#+#+#+#+  +#+         \n");
+	terminal_column = align;    /* next line */
+	terminal_writestring("     #+#   #+#           \n");
+	terminal_column = align;    /* next line \n*/
+	terminal_writestring("   ###  ##########       \n");
+	terminal_column = 0;
+	terminal_row += 2;
 }
 
 /*
 	Very simple itoa
 */
-void	kitoa_base(int n, int base)
+void	kitoa_base(int n, int base, int pad)
 {
 	char	*ascii = "0123456789abcdef";
 	int		div = 1;
+	int		p_div = 1;
+	int		p_n = n;
+	int		size = 0;
 
 	while (div < div * base && div * base < n)
 		div *= base;
+
+	p_div = div;
+	while (p_div > 0) {
+		size++;
+		p_n = p_n % p_div;
+		p_div = p_div / base;
+	}
+	while (size < pad) {
+		terminal_putchar('0');
+		size++;
+	}
 
 	while (div > 0) {
 		terminal_putchar(ascii[n / div]);
@@ -117,12 +134,17 @@ void 		kprintf(const char *str, ...)
 {
 	uint32_t	i = 0;
 	va_list 	args;
+	int			pad = 0;
 
 	va_start(args, str);
 	while(str[i]) {
 		if (str[i] != '%')
 			terminal_putchar(str[i]);
 		if (str[i] == '%') {
+			if (str[i + 1] >= '0' && str[i + 1] <= '9') {
+				pad = str[i + 1] - '0';
+				i++;
+			}
 			if (str[i + 1] == 's') {
 				terminal_writestring(va_arg(args, char *));
 				i++;
@@ -132,15 +154,15 @@ void 		kprintf(const char *str, ...)
 				i++;	
 			}
 			else if (str[i + 1] == 'd') {
-				kitoa_base(va_arg(args, int), 10);
+				kitoa_base(va_arg(args, int), 10, pad);
 				i++;	
 			}
 			else if (str[i + 1] == 'x') {
-				kitoa_base(va_arg(args, int), 16);
+				kitoa_base(va_arg(args, int), 16, pad);
 				i++;	
 			}
 			else if (str[i + 1] == 'b') {
-				kitoa_base(va_arg(args, int), 2);
+				kitoa_base(va_arg(args, int), 2, pad);
 				i++;	
 			}
 			else
@@ -149,4 +171,31 @@ void 		kprintf(const char *str, ...)
 		i++;
 	}
 	va_end(args);
+}
+
+
+void			kdump(uint8_t *addr, uint32_t limit) {
+	uint32_t	i = 0;
+	uint32_t	j;
+
+	while (i < limit) {
+		kprintf("0x%8x: ", (addr + i));		//Print addresse
+
+		j = i;
+		while (j < limit && j < i + 16) {	//dump hex
+			kprintf("%2x ", addr[j]);
+			j++;
+		}
+
+		kprintf("  ");
+
+		j = i;
+		while (j < limit && j < i + 16) {	//dump char
+			kprintf("%c", addr[j] >= 'a' && addr[j] <= 'z' ? addr[j] : '.');
+			j++;
+		}
+
+		kprintf("\n");
+		i += 16;
+	}
 }

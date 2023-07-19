@@ -19,5 +19,6 @@ void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
 void print_42(void);
 void kprintf(const char *str, ...);
+void kdump(uint8_t *addr, uint32_t limit);
 
 #endif

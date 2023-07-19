@@ -108,6 +108,7 @@ struct gdt_ptr
 extern void gdt_flush();
 
 /* gdt.c */
-void     init_gdt(void);
+void        init_gdt(void);
+void        print_gdt();
 
 #endif

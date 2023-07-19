@@ -1,4 +1,5 @@
 #include <../includes/gdt.h>
+#include <../includes/print.h>
 
 /* Set the ptr gdt to address of subject */
 struct gdt_entry *gdt = (struct gdt_entry *)GDT_ADDRESS;
@@ -38,4 +39,14 @@ void init_gdt(void)
 
     /* Flush out the old GDT and install the new changes with addresse of new */
     gdt_flush(&gp);
+}
+
+void print_gdt() {
+    kprintf("---- GDT INFO ----\n");
+    kprintf("GDT Base: 0x%8x\n", gp.base);
+    kprintf("GDT Limite: %x\n", gp.limit);
+
+    kprintf("\n\n---- Dump Stack ----\n");
+    kdump(gp.base, gp.limit + 9);
+
 }
