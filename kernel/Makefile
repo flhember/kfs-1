@@ -23,7 +23,7 @@ INC_PATH = ./includes/
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/
 
-KRL_FILES = kernel tty keyboard gdt
+KRL_FILES = kernel print keyboard gdt
 KRL_FILES_AS = flush
 
 SRC_FILES = $(KRL_FILES:%=%.c)

@@ -1,8 +1,9 @@
-#ifndef TTY_H
-#define TTY_H
+#ifndef PRINT_H
+#define PRINT_H
  
 #include <stddef.h>     //size_t
 #include <stdint.h>     //unsigned int 8/16 
+#include <stdarg.h>     //to va_arg printf
 
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
@@ -17,5 +18,6 @@ void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
 void print_42(void);
+void kprintf(const char *str, ...);
 
 #endif

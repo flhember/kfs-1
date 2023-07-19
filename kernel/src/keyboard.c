@@ -1,6 +1,6 @@
 #include "keyboard.h"  
-#include <../includes/tty.h>
-
+#include "../includes/print.h"
+/*
 int clicked = 0;
 int canSend = 0;
 
@@ -221,4 +221,4 @@ void keyboard_handler()
         }
     }
 
-}
+}*/

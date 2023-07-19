@@ -14,16 +14,16 @@ CFLAGS +=
 ARCC = i686-elf-ar
 ARFLAGS +=
 
-NAME = libc
+NAME = libc.a
 #------------------------------------PATH/FILES-----------------------------------#
 
 INC_PATH = ./includes/
-STRNG_PATH = ./string/
+SRC_PATH = ./src/
 OBJ_PATH = ./obj/
 
-STRNG_FILES = strlen
+SRC = strlen 
 
-SRC_FILES = $(STRNG_FILES:%=%.c)
+SRC_FILES = $(SRC:%=%.c)
 OBJ_FILES = $(patsubst %.c, $(OBJ_PATH)%.o, $(SRC_FILES))
 
 OBJ = $(patsubst %.c, $(OBJ_PATH)%.o, $(SRC_FILES))
@@ -35,7 +35,7 @@ all: $(NAME)
 $(OBJ_PATH):
 	@mkdir $(OBJ_PATH)
 
-$(OBJ_FILES): $(OBJ_PATH)%.o : $(STRNG_PATH)%.c
+$(OBJ_FILES): $(OBJ_PATH)%.o : $(SRC_PATH)%.c
 	@$(CC) $(CFLAGS) -c -I $(INC_PATH) $< -o $@
 	@echo "Compilation of $(whi)$(notdir $<)$(grn_da) done.$(end)"
 

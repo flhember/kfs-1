@@ -1,8 +1,11 @@
 #ifndef VGA_H
 #define VGA_H
 
-#include <stdint.h>
+#include <stdint.h>	// For uint type 
 
+/*
+	All possible color
+*/
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
 	VGA_COLOR_BLUE = 1,
@@ -21,12 +24,18 @@ enum vga_color {
 	VGA_COLOR_LIGHT_BROWN = 14,
 	VGA_COLOR_WHITE = 15,
 };
- 
+
+/*
+	Return good hex with fg and bg color
+*/
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) 
 {
 	return fg | bg << 4;
 }
- 
+
+/*
+	Return good hex with char and color to buffer terminal
+*/
 static inline uint16_t vga_entry(unsigned char uc, uint8_t color) 
 {
 	return (uint16_t) uc | (uint16_t) color << 8;

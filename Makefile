@@ -27,6 +27,9 @@ BOOT_PATH = $(ISO_PATH)/boot
 GRUB_PATH = $(BOOT_PATH)/grub
 ARCH_PATH = arch/i386
 OBJ_PATH = $(shell pwd)/kernel/obj
+LIB_PATH = libc/
+LIB = libc.a
+OBJ = obj/
 
 BOOT_FILE = $(ARCH_PATH)/boot.s
 GRUB_FILE = $(ARCH_PATH)/grub.cfg
@@ -46,7 +49,7 @@ build:
 	@$(ASCC) $(BOOT_FILE) -o $(OBJ_PATH)/boot.o
 
 linker: build 
-	@$(CC) -T $(LINK_FILE) -o $(BIN) $(CFLAGS) $(OBJ_FILES) -lgcc libc/libc
+	@$(CC) -T $(LINK_FILE) -o $(BIN) $(CFLAGS) $(OBJ_FILES) -lgcc $(LIB_PATH)$(LIB)
 
 iso: build linker
 	@mkdir -pv $(GRUB_PATH)
@@ -60,12 +63,12 @@ boot: build linker iso
 
 		#ERROR
 clean:
-	@rm -rf kernel/obj
-	@rm -rf libc/obj
+	@rm -rf kernel/$(OBJ)
+	@rm -rf $(LIB_PATH)$(OBJ)
 
 fclean: clean
 	@rm -rf $(BIN) $(ISO_PATH) $(ISO)
-	@rm -rf libc/libc
+	@rm -rf $(LIB_PATH)$(LIB)
 
 re: fclean
 	@make all
