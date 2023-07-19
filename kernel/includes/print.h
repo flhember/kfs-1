@@ -4,9 +4,6 @@
 #include <stddef.h>     //size_t
 #include <stdint.h>     //unsigned int 8/16 
 #include <stdarg.h>     //to va_arg printf
-
-static const size_t VGA_WIDTH = 80;
-static const size_t VGA_HEIGHT = 25;
  
 size_t terminal_row;
 size_t terminal_column;

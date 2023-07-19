@@ -12,5 +12,4 @@ void kernel_main(void)
 	/* PRINT INFO */
  	print_42();
 	print_gdt();
-
 }
