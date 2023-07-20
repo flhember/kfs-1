@@ -21,7 +21,7 @@ INC_PATH = ./includes/
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/
 
-SRC = strlen 
+SRC = strlen strcmp
 
 SRC_FILES = $(SRC:%=%.c)
 OBJ_FILES = $(patsubst %.c, $(OBJ_PATH)%.o, $(SRC_FILES))

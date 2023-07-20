@@ -2,7 +2,7 @@
 #define PRINT_H
  
 #include <stddef.h>     //size_t
-#include <stdint.h>     //unsigned int 8/16 
+#include <stdint.h>		// For uint type 
 #include <stdarg.h>     //to va_arg printf
  
 size_t terminal_row;

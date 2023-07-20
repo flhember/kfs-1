@@ -10,7 +10,7 @@ end=$ \033[0m
 #-----------------------------------Cross-Compiler--------------------------------#
 
 CC = i686-elf-gcc
-CFLAGS += -ffreestanding -nostdlib -c -Wall -Wextra
+CFLAGS += -fno-builtin -fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs -ffreestanding -Wall -Wextra -c
 
 ASCC = i686-elf-as
 ASFLAGS +=
@@ -23,7 +23,7 @@ INC_PATH = ./includes/
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/
 
-KRL_FILES = kernel print keyboard gdt
+KRL_FILES = kernel print gdt
 KRL_FILES_AS = flush
 
 SRC_FILES = $(KRL_FILES:%=%.c)

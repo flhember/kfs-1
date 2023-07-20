@@ -6,8 +6,8 @@ struct gdt_entry *gdt = (struct gdt_entry *)GDT_ADDRESS;
 
 struct gdt_ptr gp;
 
-/* Setup a descriptor in the Global Descriptor Table */
-void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran)
+/* Function to setup one segment in the GDT */
+void gdt_set_gate(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran)
 {
     gdt[num].base_low = (base & 0xFFFF);
     gdt[num].base_middle = (base >> 16) & 0xFF;
@@ -18,6 +18,10 @@ void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned cha
     gdt[num].access = access;
 }
 
+/*
+    Function to init gdt create with good base (addr) and limit (size)
+    Create all segment we need and load it.
+*/
 void init_gdt(void)
 {
     /* Setup the GDT pointer and limit */
@@ -41,6 +45,9 @@ void init_gdt(void)
     gdt_flush(&gp);
 }
 
+/*
+    Function to print all gtd info and dump the stack for see the gdt part
+*/
 void print_gdt() {
     int i = 1;
     char *tab[NB_SEG];
@@ -69,6 +76,6 @@ void print_gdt() {
     }
 
     kprintf("\n---- Dump Stack ----\n");
-    kdump(gp.base, gp.limit + 9);
+    kdump((uint8_t *)gp.base, gp.limit + 9);
 
 }

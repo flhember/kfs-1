@@ -2,7 +2,6 @@
 #include "../includes/print.h"
 #include "../../libc/includes/libc.h"
 
-
 /*
 	Function to init terminal, color and fill buffer with ' ' char
 */
@@ -126,7 +125,6 @@ void	kitoa_base(int n, int base, int pad)
 	}
 }
 
-
 /*
 	Printf for kernel
 */
@@ -173,7 +171,9 @@ void 		kprintf(const char *str, ...)
 	va_end(args);
 }
 
-
+/*
+	Dump memory, start to addr to limit var
+*/
 void			kdump(uint8_t *addr, uint32_t limit) {
 	uint32_t	i = 0;
 	uint32_t	j;

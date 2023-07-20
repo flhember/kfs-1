@@ -1,7 +1,5 @@
 #include <../includes/gdt.h>
 #include "../includes/print.h"
-#include <../includes/keyboard.h>
-
 
 void kernel_main(void) 
 {
