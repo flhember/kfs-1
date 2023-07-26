@@ -84,7 +84,9 @@ Not use 4 last byte
 
 #define GRAN 0xCF
 
-/* Defines a GDT segment. */
+/*
+    Defines a GDT segment.
+*/
 struct gdt_entry
 {
     uint16_t limit_low;

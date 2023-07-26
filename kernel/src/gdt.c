@@ -77,5 +77,4 @@ void print_gdt() {
 
     kprintf("\n---- Dump Stack ----\n");
     kdump((uint8_t *)gp.base, gp.limit + 9);
-
 }

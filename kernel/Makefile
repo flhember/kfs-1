@@ -23,8 +23,8 @@ INC_PATH = ./includes/
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/
 
-KRL_FILES = kernel print gdt
-KRL_FILES_AS = flush
+KRL_FILES = kernel print gdt idt
+KRL_FILES_AS = flush idt_load isr
 
 SRC_FILES = $(KRL_FILES:%=%.c)
 SRC_AS_FILES = $(KRL_FILES_AS:%=%.s)
