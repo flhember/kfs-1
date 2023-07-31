@@ -1,6 +1,21 @@
 #include <stdint.h>     // For uint32 type
 
 /*
+        Flag to isr:
+    P 	DPL 	Always 01110
+    1   00      01110           = 0x8E
+    P - Segment is present? (1 = Yes)
+    DPL - Which Ring (0 to 3)
+*/
+#define FLAG_ISR    0x8E
+
+/*
+        Index in gdt to kernel code execute:
+        8 -> index just after the null segment.
+*/
+#define IDX_KERNEL_CODE    0x08
+
+/*
     Defines an IDT entry
 */
 struct idt_entry
@@ -21,39 +36,23 @@ struct idt_ptr
     unsigned int base;
 } __attribute__((packed));      // Don't add padding with gcc
 
-/* Declare an IDT of 256 entries. Although we will only use the
-*  first 32 entries in this tutorial, the rest exists as a bit
-*  of a trap. If any undefined IDT entry is hit, it normally
-*  will cause an "Unhandled Interrupt" exception. Any descriptor
-*  for which the 'presence' bit is cleared (0) will generate an
-*  "Unhandled Interrupt" exception */
+/* Declare an IDT of 256 entries.*/
 struct idt_entry idt[256];
 struct idt_ptr idtp;
 
 /*
-        Flag to isr:
-    P 	DPL 	Always 01110
-    1   00      01110           = 0x8E
-    P - Segment is present? (1 = Yes)
-    DPL - Which Ring (0 to 3)
+    Struct to get all push asm to c function,
+    like this we can have the two info push by the isr function.
+    int_no = num of isr
+    err_code = error code
 */
-#define FLAG_ISR    0x8E
-
-/*
-        Index in gdt to kernel code execute:
-        8 -> index just after the null segment.
-*/
-#define IDX_KERNEL_CODE    0x08
-
-/*
-    function to init
-*/
-void idt_install();
-
-/*
-    asm function to load idt
-*/
-extern void idt_load();
+struct regs
+{
+    unsigned int gs, fs, es, ds;      /* pushed the segs last */
+    unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
+    unsigned int int_no, err_code;    /* our 'push byte #' and ecodes do this */
+    unsigned int eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
+};
 
 /*
     All asm function for isr
@@ -91,16 +90,42 @@ extern void _isr29();
 extern void _isr30();
 extern void _isr31();
 
+/* All asm function to irq */
+extern void _irq0();
+extern void _irq1();
+extern void _irq2();
+extern void _irq3();
+extern void _irq4();
+extern void _irq5();
+extern void _irq6();
+extern void _irq7();
+extern void _irq8();
+extern void _irq9();
+extern void _irq10();
+extern void _irq11();
+extern void _irq12();
+extern void _irq13();
+extern void _irq14();
+extern void _irq15();
+
 /*
-    Struct to get all push asm to c function,
-    like this we can have the two info push by the isr function.
-    int_no = num of isr
-    err_code = error code
+    idt
 */
-struct regs
-{
-    unsigned int gs, fs, es, ds;      /* pushed the segs last */
-    unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
-    unsigned int int_no, err_code;    /* our 'push byte #' and ecodes do this */
-    unsigned int eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
-};
+void idt_install();
+extern void idt_load();
+void idt_set_gate(int num, unsigned long base, unsigned short sel, unsigned char flags);
+
+/*
+    irq 
+*/
+void irq_install();
+void irq_install_handler(int irq, void (*handler)(struct regs *r));
+void irq_handler(struct regs *r);
+void timer_install();
+void keyboard_install();
+
+/*
+    function to read and write on port
+*/
+void outportb (unsigned short _port, unsigned char _data);
+unsigned char inportb (unsigned short _port);

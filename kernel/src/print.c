@@ -20,6 +20,20 @@ void terminal_initialize(void)
 }
 
 /*
+	Update hardware cursor
+*/
+void move_csr()
+{
+    unsigned index;
+
+    index = terminal_row * 80 + terminal_column;
+    outportb(0x3D4, 14);
+    outportb(0x3D5, index >> 8);
+    outportb(0x3D4, 15);
+    outportb(0x3D5, index);
+}
+
+/*
 	Function to set color of terminal
 */
 void terminal_setcolor(uint8_t color) 
@@ -48,6 +62,7 @@ void terminal_putchar(char c)
 		if (++terminal_row == VGA_HEIGHT)
 			terminal_row = 0;
 	}
+	move_csr();
 }
 
 /*

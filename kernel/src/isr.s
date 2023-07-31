@@ -39,8 +39,6 @@
 .global _isr30
 .global _isr31
 
-.section .text // a test sans
-
 //  0: Divide By Zero Exception
 _isr0:
     cli
@@ -269,6 +267,7 @@ _isr31:
     main function for save stack, call c function and restore the stack
 */
 isr_common_stub:
+    cli
     pusha
     push %ds
     push %es
@@ -291,6 +290,4 @@ isr_common_stub:
     pop %es
     pop %ds
     popa
-
-    add $8, %esp
-    iret
+    sti

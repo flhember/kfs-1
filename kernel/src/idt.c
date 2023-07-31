@@ -94,9 +94,21 @@ void idt_install()
     idt_set_gate(29, (unsigned)_isr29, IDX_KERNEL_CODE, FLAG_ISR);
     idt_set_gate(30, (unsigned)_isr30, IDX_KERNEL_CODE, FLAG_ISR);
     idt_set_gate(31, (unsigned)_isr31, IDX_KERNEL_CODE, FLAG_ISR);
+    
+    /* irq init */
+    irq_install();
 
     /* Points the processor's internal register to the new IDT */
     idt_load(&idtp);
+}
+
+void print_stack(struct regs *r) {
+    kprintf("   eip     %x\n", r->eip);
+    kprintf("   cs      %x\n", r->cs);
+    kprintf("   eflags  %x\n", r->eflags);
+    kprintf("   useresp %x\n", r->useresp);
+    kprintf("   ss      %x\n", r->ss);
+
 }
 
 void fault_handler(struct regs *r)
@@ -105,6 +117,7 @@ void fault_handler(struct regs *r)
     {
         kprintf("%s", exception_messages[r->int_no]);
         kprintf(" Exception. System Halted!\n");
-        for (;;);
+        print_stack(r);
+        //while (1) ;
     }
 }
