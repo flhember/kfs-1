@@ -44,11 +44,11 @@ const char *exception_messages[] =
 /* Function to setup one entry in the IDT */
 void idt_set_gate(int num, unsigned long base, unsigned short sel, unsigned char flags)
 {
-    idt[num].base_lo = (base & 0xFFFF);         //low 16 bits
+    idt[num].base_lo = (uint32_t)base & 0xFFFF; //low 16 bits
     idt[num].sel = sel;                         //index of kernel code segment (gdt)
     idt[num].always0 = 0;                       //alawys 0
     idt[num].flags = flags;                     //flag with priority and if is present or not
-    idt[num].base_hi = (base >> 16) & 0xFFFF;   //hight 16 bits
+    idt[num].base_hi = (uint32_t)base >> 16;    //hight 16 bits
 }
 
 /* Installs the IDT */
@@ -102,22 +102,21 @@ void idt_install()
     idt_load(&idtp);
 }
 
-void print_stack(struct regs *r) {
-    kprintf("   eip     %x\n", r->eip);
-    kprintf("   cs      %x\n", r->cs);
-    kprintf("   eflags  %x\n", r->eflags);
-    kprintf("   useresp %x\n", r->useresp);
-    kprintf("   ss      %x\n", r->ss);
+void save_and_print_stack() {
+    void *stack;
+
+	asm ("movl %%esp, %0" : "=r" (stack));
+    kdump(stack, 64);
 
 }
 
-void fault_handler(struct regs *r)
+void isr_fault_handler(struct regs *r)
 {
     if (r->int_no < 32)
     {
-        kprintf("%s", exception_messages[r->int_no]);
-        kprintf(" Exception. System Halted!\n");
-        print_stack(r);
-        //while (1) ;
+        kprintf("\nKernel panic: %s", exception_messages[r->int_no]);
+        kprintf(" Exception. System Halted!\n\n");
+        save_and_print_stack();
+        while (1) ;
     }
 }

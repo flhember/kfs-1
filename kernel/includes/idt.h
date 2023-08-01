@@ -123,9 +123,3 @@ void irq_install_handler(int irq, void (*handler)(struct regs *r));
 void irq_handler(struct regs *r);
 void timer_install();
 void keyboard_install();
-
-/*
-    function to read and write on port
-*/
-void outportb (unsigned short _port, unsigned char _data);
-unsigned char inportb (unsigned short _port);

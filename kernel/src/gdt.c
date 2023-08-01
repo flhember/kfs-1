@@ -60,7 +60,7 @@ void print_gdt() {
     tab[5] = "USER_DATA";
     tab[6] = "USER_STCK";
 
-    kprintf("---- GDT INFO ----\n");
+    kprintf("\n---- GDT INFO ----\n");
     kprintf("GDT Base: 0x%8x\n", gp.base);
     kprintf("GDT Limite: %x\n", gp.limit);
     kprintf("\n            BLOW BMID BHGH LMTLOW GRAN ACC\n");

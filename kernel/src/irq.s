@@ -141,7 +141,7 @@ _irq15:
 .extern irq_handler
 
 /*
-    main function for save stack, call c function and restore the stack
+    main function push stack, call c function and pop the stack
 */
 irq_common_stub:
     pusha

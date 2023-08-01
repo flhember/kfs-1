@@ -8,7 +8,7 @@ void timer_handler(struct regs *r)
     (void)r;
     timer_ticks++;
 
-    // 18 clocks, approximately 1 second, we can display it
+    // 18 clocks, approximately 1 second
     if (timer_ticks % 18 == 0) {
         //kprintf("One second has passed\n");
     }

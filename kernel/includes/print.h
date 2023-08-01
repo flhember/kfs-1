@@ -18,4 +18,10 @@ void print_42(void);
 void kprintf(const char *str, ...);
 void kdump(uint8_t *addr, uint32_t limit);
 
+/*
+    function to read and write on port
+*/
+void outportb (unsigned short _port, unsigned char _data);
+unsigned char inportb (unsigned short _port);
+
 #endif

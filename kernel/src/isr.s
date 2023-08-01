@@ -260,34 +260,23 @@ _isr31:
 /*
     c function.
 */
-.extern fault_handler
+.extern isr_fault_handler
 
 
 /*
-    main function for save stack, call c function and restore the stack
+    main function for save and print stack and clean register
 */
 isr_common_stub:
-    cli
-    pusha
-    push %ds
-    push %es
-    push %fs
-    push %gs
-
-    mov $0x10, %ax
-    mov %ax, %ds
-    mov %ax, %es
-    mov %ax, %fs
-    mov %ax, %gs
     mov %esp, %eax
     push %eax
-    mov $fault_handler, %eax
+    mov $isr_fault_handler, %eax
     call *%eax
-
-    pop %eax
-    pop %gs
-    pop %fs
-    pop %es
-    pop %ds
-    popa
-    sti
+    xor %eax, %eax
+    xor %ebx, %ebx
+    xor %ecx, %ecx
+    xor %edx, %edx
+    xor %esi, %esi
+    xor %edi, %edi
+    xor %ebp, %ebp
+    xor %esp, %esp
+    hlt

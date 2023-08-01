@@ -49,6 +49,7 @@ void keyboard_handler(struct regs *r)
 
     if (scancode & 0x80)
     {
+      //skip release keys
     } else if (scancode == 41) {
       print_gdt();
     } else {
